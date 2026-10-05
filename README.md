@@ -53,7 +53,7 @@ Use the provided helper script to get a new patched firmware.
 
 ## The Hack
 
-You only have to do this once per device. After you have done this you can jump straight to using the `ct` commands.
+You only have to do this once per device. After you have done this you can jump straight to using the `make` commands.
 
 - hold buttons 1 & 4
 - plug in CarThing
@@ -66,44 +66,54 @@ You only have to do this once per device. After you have done this you can jump 
 ./prepare_device.sh
 ```
 
-## The CT script
+## The Makefile
 
-ADB is included in this repository and can be used on its own to interact with the CarThing. However the included `ct` script will do pretty much everything you need with fewer keystrokes
+ADB is included in this repository and can be used on its own to interact with the CarThing. However the included `Makefile` will do pretty much everything you need with fewer keystrokes.
 
-The following commands work from the project root:
+Run `make` or `make help` from the project root to list the available targets:
+
+```
+make help
+```
 
 Create a local backup in the `backup` directory from the contents of the CarThings webapp
 
 ```
-./ct --backup
+make backup
 ```
 
-Serve the webapp directory on port `8000`. You can go to `http://localhost:8000` to preview your local webapp before pushing. (ctl-c to exit)
+Serve the `./webapp` directory on port `8000`. You can go to `http://localhost:8000` to preview your local webapp before pushing. (ctl-c to exit)
 
 ```
-./ct --serve
+make serve
 ```
 
 Pull the contents of the webapp directory from the CarThing to your current working directory
 
 ```
-./ct --pull
+make pull
 ```
 
-Push the contents of your `./webapp` directory to the CarThing
+Push the contents of your `./webapp/dist` build to the CarThing and restart Chromium
 
 ```
-./ct --push
+make push
+```
+
+Restore the device webapp from its on-device backup
+
+```
+make restore
 ```
 
 Open a shell to the CarThing
 
 ```
-./ct --shell
+make shell
 ```
 
 Reboot the CarThing
 
 ```
-./ct --reboot
+make reboot
 ```
