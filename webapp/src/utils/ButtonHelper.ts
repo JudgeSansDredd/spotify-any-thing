@@ -20,10 +20,7 @@ export enum WheelDirection {
 }
 
 export type TopOfScreenButtons =
-  | Buttons.Button1
-  | Buttons.Button2
-  | Buttons.Button3
-  | Buttons.Button4;
+  Buttons.Button1 | Buttons.Button2 | Buttons.Button3 | Buttons.Button4;
 
 export type TopButtons = TopOfScreenButtons | Buttons.Button5;
 export type SideButtons = Buttons.ButtonWheel | Buttons.ButtonFront;
