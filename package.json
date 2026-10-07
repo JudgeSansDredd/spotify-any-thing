@@ -6,7 +6,9 @@
     "dev": "vite serve -c ./vite.config.js ./webapp",
     "prod": "vite build -c ./vite.config.js ./webapp && vite preview",
     "build": "vite build -c ./vite.config.js ./webapp",
-    "format": "prettier --write 'webapp/src/**/*.ts' 'webapp/src/**/*.tsx'",
+    "format": "biome format --write",
+    "lint": "biome lint --write",
+    "check": "biome check --write",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
@@ -20,7 +22,7 @@
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.39",
-    "prettier": "^3.3.3",
+    "@biomejs/biome": "^1.9.4",
     "tailwindcss": "^3.4.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
