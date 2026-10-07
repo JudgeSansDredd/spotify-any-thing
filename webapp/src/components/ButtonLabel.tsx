@@ -1,7 +1,7 @@
 import {
   ButtonLabelPositions,
   Buttons,
-  LabelableButtons,
+  type LabelableButtons,
 } from '../utils/ButtonHelper';
 
 export interface ButtonLabelPropType {

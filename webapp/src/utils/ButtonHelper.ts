@@ -5,18 +5,18 @@ import { useEffect } from 'react';
  */
 
 export enum Buttons {
-  Button1,
-  Button2,
-  Button3,
-  Button4,
-  Button5,
-  ButtonFront,
-  ButtonWheel,
+  Button1 = 0,
+  Button2 = 1,
+  Button3 = 2,
+  Button4 = 3,
+  Button5 = 4,
+  ButtonFront = 5,
+  ButtonWheel = 6,
 }
 
 export enum WheelDirection {
-  Left,
-  Right,
+  Left = 0,
+  Right = 1,
 }
 
 export type TopOfScreenButtons =
