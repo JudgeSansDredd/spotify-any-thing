@@ -18,6 +18,8 @@ interface RangeMils {
 export interface Ranges {
   range1: RangeMils;
   range2: RangeMils;
+  minRange: number;
+  maxRange: number;
 }
 
 type RangeValuesForCountry = Record<ARTILLERY_TYPES, Ranges>;
@@ -34,7 +36,9 @@ export const RANGE_VALUES: RangeValues = {
       range2: {
         range: 200,
         mils: 100,
-      },
+      }  ,    minRange: 200,
+      maxRange: 600
+
     },
     STATIONARY: {
       range1: {
@@ -45,6 +49,8 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 978,
       },
+      minRange: 100,
+      maxRange: 1600
     },
   },
   Germany: {
@@ -56,7 +62,9 @@ export const RANGE_VALUES: RangeValues = {
       range2: {
         range: 200,
         mils: 100,
-      },
+      },      minRange: 200,
+      maxRange: 600
+
     },
     STATIONARY: {
       range1: {
@@ -67,6 +75,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 978,
       },
+            minRange: 100,
+      maxRange: 1600
+
     },
   },
   'United Kingdom': {
@@ -78,7 +89,9 @@ export const RANGE_VALUES: RangeValues = {
       range2: {
         range: 100,
         mils: 100,
-      },
+      },      minRange: 200,
+      maxRange: 600
+
     },
     STATIONARY: {
       range1: {
@@ -89,6 +102,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 533,
       },
+            minRange: 100,
+      maxRange: 1600
+
     },
   },
   'Soviet Union': {
@@ -101,6 +117,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 200,
         mils: 100,
       },
+            minRange: 200,
+      maxRange: 600
+
     },
     STATIONARY: {
       range1: {
@@ -111,6 +130,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 1120,
       },
+            minRange: 100,
+      maxRange: 1600
+
     },
   },
   'Mortar (Vietnam)': {
@@ -123,6 +145,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 85,
       },
+            minRange: 100,
+      maxRange: 450
+
     },
     SPA: {
       range1: {
@@ -133,6 +158,9 @@ export const RANGE_VALUES: RangeValues = {
         range: 100,
         mils: 85,
       },
+            minRange: 100,
+      maxRange: 450
+
     },
   },
 };

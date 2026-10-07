@@ -18,15 +18,16 @@ LOCAL_WEBAPP_PATH     := ./webapp/dist
 help:
 	@echo "Usage: make <target>"
 	@echo ""
-	@echo "  shell    Mount rw, back up the device webapp, open an adb shell"
-	@echo "  restore  Restore the device webapp from its on-device backup"
-	@echo "  serve    Serve ./webapp on http://localhost:8000"
-	@echo "  backup   Pull the device webapp into a timestamped ./backup dir"
-	@echo "  pull     Mount rw and pull the device webapp into ./"
-	@echo "  push     Back up, mount rw, push the local build, restart Chromium"
-	@echo "  reboot   Reboot the device"
+	@echo "  shell      Mount rw, back up the device webapp, open an adb shell"
+	@echo "  restore    Restore the device webapp from its on-device backup"
+	@echo "  serve      Serve ./webapp on http://localhost:8000"
+	@echo "  backup     Pull the device webapp into a timestamped ./backup dir"
+	@echo "  pull       Mount rw and pull the device webapp into ./"
+	@echo "  push       Back up, mount rw, push the local build, restart Chromium"
+	@echo "  reboot     Reboot the device"
 
 device-check:
+	$(SUPERBIRD)
 	@if [ -z "$$($(ADB) devices -l | grep 'spotify-car-thing')" ]; then \
 	  echo "$(RED)No device attached. Exiting.$(DEFAULT)"; \
 	  exit 1; \
@@ -66,6 +67,10 @@ define RESTORE_WEBAPP_ON_DEVICE
 	  || echo 'backup not present on device'"
 endef
 
+define SUPERBIRD
+	@git submodule update --init --recursive
+endef
+
 # Targets ----------------------------------------------------------------------
 
 shell: device-check
@@ -73,7 +78,7 @@ shell: device-check
 	$(BACKUP_WEBAPP_ON_DEVICE)
 	$(ADB) shell
 
-restore:
+restore: device-check
 	$(RESTORE_WEBAPP_ON_DEVICE)
 	$(RESTART_CHROMIUM)
 
@@ -88,7 +93,7 @@ pull: device-check
 	$(MOUNT)
 	$(ADB) pull $(REMOTE_WEBAPP_PATH) ./
 
-push: device-check
+push: device-check build
 	$(BACKUP_WEBAPP_ON_DEVICE)
 	$(BACKUP_LOCAL)
 	$(MOUNT)
@@ -101,3 +106,6 @@ push: device-check
 reboot: device-check
 	@echo "$(GOLD)Rebooting device...$(DEFAULT)"
 	$(ADB) shell reboot
+
+build:
+	@npm run build

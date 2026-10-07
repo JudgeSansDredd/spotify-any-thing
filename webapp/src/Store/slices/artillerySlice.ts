@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ARTILLERY_TYPES, INPUT_TYPES } from '../../Utils/artillery/constants';
-import { COUNTRIES } from '../../Utils/constants';
+import { ARTILLERY_TYPES, INPUT_TYPES } from '../../utils/artillery/constants';
+import { COUNTRIES } from '../../utils/constants';
 
 interface InitialStateType {
   range: number;
