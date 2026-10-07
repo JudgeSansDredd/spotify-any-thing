@@ -6,8 +6,6 @@
     "dev": "vite serve -c ./vite.config.js ./webapp",
     "prod": "vite build -c ./vite.config.js ./webapp && vite preview",
     "build": "vite build -c ./vite.config.js ./webapp",
-    "format": "biome format --write",
-    "lint": "biome lint --write",
     "check": "biome check --write",
     "typecheck": "tsc --noEmit --skipLibCheck"
   },
