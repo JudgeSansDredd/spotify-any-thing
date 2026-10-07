@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ARTILLERY_TYPES, INPUT_TYPES } from '../../utils/artillery/constants';
 import { COUNTRIES } from '../../utils/constants';
 

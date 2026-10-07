@@ -3,11 +3,11 @@ import ButtonLabel from '../components/ButtonLabel';
 import Layout from '../layout';
 import {
   Buttons,
-  LabelableButtons,
+  type LabelableButtons,
+  WheelDirection,
   useKeyDown,
   useKeyUp,
   useWheel,
-  WheelDirection,
 } from '../utils/ButtonHelper';
 
 export default function Welcome() {
@@ -99,7 +99,7 @@ export default function Welcome() {
           <div
             className="bg-blue-600 h-2.5 rounded-full"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
       </div>
     </Layout>

@@ -1,15 +1,15 @@
 import { useState } from 'react';
+import Welcome from './Page/Welcome';
 import ButtonLabel from './components/ButtonLabel';
 import Layout from './layout';
 import {
   Buttons,
-  LabelableButtons,
+  type LabelableButtons,
+  WheelDirection,
   useKeyDown,
   useKeyUp,
   useWheel,
-  WheelDirection,
 } from './utils/ButtonHelper';
-import Welcome from './Page/Welcome';
 
 export default function App() {
   return <Welcome />;

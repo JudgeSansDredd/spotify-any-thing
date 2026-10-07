@@ -1,5 +1,5 @@
-import { COUNTRIES } from '../constants';
-import { ARTILLERY_TYPES, RANGE_VALUES, Ranges } from './constants';
+import type { COUNTRIES } from '../constants';
+import { type ARTILLERY_TYPES, RANGE_VALUES, type Ranges } from './constants';
 
 function _calcualteRangeConstants({ range1, range2 }: Ranges) {
   const deltaMils = range1.mils - range2.mils;
