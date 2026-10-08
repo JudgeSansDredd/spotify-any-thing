@@ -1,19 +1,17 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ARTILLERY_TYPES, INPUT_TYPES } from '../../utils/artillery/constants';
+import { ARTILLERY_TYPES } from '../../utils/artillery/constants';
 import { COUNTRIES } from '../../utils/constants';
 
 interface InitialStateType {
   range: number;
   country: COUNTRIES;
   spa: ARTILLERY_TYPES;
-  inputType: INPUT_TYPES;
 }
 
 const initialState: InitialStateType = {
-  range: 100,
+  range: 0,
   country: COUNTRIES.UNITED_STATES,
   spa: ARTILLERY_TYPES.STATIONARY,
-  inputType: INPUT_TYPES.DIAL,
 };
 
 export const artillerySlice = createSlice({
@@ -29,15 +27,12 @@ export const artillerySlice = createSlice({
     setSPA: (state, action: PayloadAction<ARTILLERY_TYPES>) => {
       state.spa = action.payload;
     },
-    setInputType: (state, action: PayloadAction<INPUT_TYPES>) => {
-      state.inputType = action.payload;
-    },
     appendRangeDigit: (state, action: PayloadAction<number>) => {
       state.range = state.range * 10 + action.payload;
     },
   },
 });
 
-export const { setRange, setCountry, setSPA, setInputType, appendRangeDigit } =
+export const { setRange, setCountry, setSPA, appendRangeDigit } =
   artillerySlice.actions;
 export default artillerySlice.reducer;

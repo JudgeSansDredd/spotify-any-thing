@@ -1,10 +1,5 @@
 import type { COUNTRIES } from '../constants';
 
-export enum INPUT_TYPES {
-  DIAL = 'DIAL',
-  KEYPAD = 'KEYPAD',
-}
-
 export enum ARTILLERY_TYPES {
   STATIONARY = 'STATIONARY',
   SPA = 'SPA',

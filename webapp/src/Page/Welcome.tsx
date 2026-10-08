@@ -1,6 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../Store/hooks';
+import { setCountry, setRange, setSPA } from '../Store/slices/artillerySlice';
+import {
+  setUpdateHundreds,
+  setUpdateTens,
+} from '../Store/slices/operationSlice';
 import ButtonLabel from '../components/ButtonLabel';
-import Layout from '../layout';
+import Elevation from '../components/Elevation';
+import RangeBar from '../components/RangeBar';
 import {
   Buttons,
   type LabelableButtons,
@@ -9,42 +16,72 @@ import {
   useKeyUp,
   useWheel,
 } from '../utils/ButtonHelper';
+import { ARTILLERY_TYPES } from '../utils/artillery/constants';
+import { useRangeBand } from '../utils/artillery/hooks';
+import { COUNTRIES } from '../utils/constants';
+import { WHEEL_SPEEDS } from '../utils/operation/constants';
+import { useDelta } from '../utils/operation/hooks';
 
 export default function Welcome() {
+  const [wheelSpeedIndex, setWheelSpeedIndex] = useState<number>(0);
+  const [wheelActive, setWheelActive] = useState<number>(0);
+  const delta = useDelta();
+  const dispatch = useAppDispatch();
+  const updateHundreds = useAppSelector(
+    (state) => state.operation.updateHundreds
+  );
+  const updateTens = useAppSelector((state) => state.operation.updateTens);
+  const updateOnes = !(updateTens || updateHundreds);
+  const { minRange, maxRange } = useRangeBand();
+  const range = useAppSelector((state) => state.artillery.range);
+  const country = useAppSelector((state) => state.artillery.country);
+  const artilleryType = useAppSelector((state) => state.artillery.spa);
+
+  useEffect(() => {
+    if (range < minRange) {
+      dispatch(setRange(minRange));
+    }
+    if (range > maxRange) {
+      dispatch(setRange(maxRange));
+    }
+  }, [dispatch, range, minRange, maxRange]);
+
   const [labelState, setLabelState] = useState<
     Partial<Record<LabelableButtons, boolean>>
   >({
-    [Buttons.Button1]: false,
-    [Buttons.Button2]: false,
-    [Buttons.Button3]: false,
     [Buttons.Button4]: false,
     [Buttons.ButtonFront]: false,
   });
 
-  const [progress, setProgress] = useState<number>(0);
-
   useKeyDown({
-    [Buttons.Button1]: () =>
-      setLabelState({ ...labelState, [Buttons.Button1]: true }),
-    [Buttons.Button2]: () =>
-      setLabelState({ ...labelState, [Buttons.Button2]: true }),
-    [Buttons.Button3]: () =>
-      setLabelState({ ...labelState, [Buttons.Button3]: true }),
-    [Buttons.Button4]: () =>
-      setLabelState({ ...labelState, [Buttons.Button4]: true }),
-    [Buttons.Button5]: () => alert('Button 5 pressed!'),
-    [Buttons.ButtonFront]: () =>
-      setLabelState({ ...labelState, [Buttons.ButtonFront]: true }),
-    [Buttons.ButtonWheel]: () => alert('Wheel pressed!'),
+    [Buttons.Button1]: () => dispatch(setUpdateHundreds(!updateHundreds)),
+    [Buttons.Button2]: () => dispatch(setUpdateTens(!updateTens)),
+    [Buttons.Button3]: () => {
+      dispatch(setUpdateTens(false));
+      dispatch(setUpdateHundreds(false));
+    },
+    [Buttons.Button4]: () => {
+      setLabelState({ ...labelState, [Buttons.Button4]: true });
+      const countries = Object.values(COUNTRIES);
+      const nextIndex = (countries.indexOf(country) + 1) % countries.length;
+      dispatch(setCountry(countries[nextIndex]));
+    },
+    [Buttons.Button5]: () => {
+      const newIndex = (wheelSpeedIndex + 1) % WHEEL_SPEEDS.length;
+      setWheelSpeedIndex(newIndex);
+    },
+    [Buttons.ButtonFront]: () => {
+      setLabelState({ ...labelState, [Buttons.ButtonFront]: true });
+      if (artilleryType === ARTILLERY_TYPES.SPA) {
+        dispatch(setSPA(ARTILLERY_TYPES.STATIONARY));
+      } else {
+        dispatch(setSPA(ARTILLERY_TYPES.SPA));
+      }
+    },
+    [Buttons.ButtonWheel]: () => setWheelSpeedIndex(0),
   });
 
   useKeyUp({
-    [Buttons.Button1]: () =>
-      setLabelState({ ...labelState, [Buttons.Button1]: false }),
-    [Buttons.Button2]: () =>
-      setLabelState({ ...labelState, [Buttons.Button2]: false }),
-    [Buttons.Button3]: () =>
-      setLabelState({ ...labelState, [Buttons.Button3]: false }),
     [Buttons.Button4]: () =>
       setLabelState({ ...labelState, [Buttons.Button4]: false }),
     [Buttons.ButtonFront]: () =>
@@ -52,9 +89,12 @@ export default function Welcome() {
   });
 
   useWheel((direction) => {
-    const newProgress =
-      direction === WheelDirection.Right ? progress + 5 : progress - 5;
-    setProgress(newProgress < 0 ? 0 : newProgress > 100 ? 100 : newProgress);
+    setWheelActive((wheelActive + 1) % WHEEL_SPEEDS[wheelSpeedIndex]);
+    if (wheelActive === 0) {
+      const coefficient = direction === WheelDirection.Right ? 1 : -1;
+      const newRange = range + coefficient * delta;
+      dispatch(setRange(newRange));
+    }
   });
 
   const labelStyles = {
@@ -63,45 +103,56 @@ export default function Welcome() {
   };
 
   return (
-    <Layout showBorder={true}>
+    <>
       <ButtonLabel
         button={Buttons.Button1}
-        label="Button 1"
-        labelActive={labelState[Buttons.Button1] ?? false}
+        label="By 100s"
+        labelActive={updateHundreds}
         {...labelStyles}
       />
       <ButtonLabel
         button={Buttons.Button2}
-        label="Button 2"
-        labelActive={labelState[Buttons.Button2] ?? false}
+        label="By 10s"
+        labelActive={updateTens}
         {...labelStyles}
       />
       <ButtonLabel
         button={Buttons.Button3}
-        label="Button 3"
-        labelActive={labelState[Buttons.Button3] ?? false}
+        label="By 1s"
+        labelActive={updateOnes}
         {...labelStyles}
       />
       <ButtonLabel
         button={Buttons.Button4}
-        label="Button 4"
+        label="Change Country"
         labelActive={labelState[Buttons.Button4] ?? false}
         {...labelStyles}
       />
       <ButtonLabel
         button={Buttons.ButtonFront}
-        label="Button Front"
+        label="Toggle SPA"
         labelActive={labelState[Buttons.ButtonFront] ?? false}
         {...labelStyles}
       />
-      <div className="absolute top-[50px] left-0 right-0 bottom-0">
-        <div className="w-3/4 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-          <div
-            className="bg-blue-600 h-2.5 rounded-full"
-            style={{ width: `${progress}%` }}
-          />
+      <div className="absolute p-4 w-3/4 top-[50px] left-0 right-0 bottom-0 overflow-y-hidden">
+        <div className="flex w-full">
+          <div>
+            {country}
+            {country !== COUNTRIES.MORTAR_VIETNAM &&
+              (artilleryType === ARTILLERY_TYPES.SPA
+                ? ' - Self Propelled Artillery'
+                : ' - Stationary Artillery')}
+          </div>
         </div>
+        <div className="w-full flex justify-between">
+          <div>Min Range: {minRange}</div>
+          <div>Max Range: {maxRange}</div>
+        </div>
+        <div className="flex justify-center">
+          <RangeBar />
+        </div>
+        <Elevation />
       </div>
-    </Layout>
+    </>
   );
 }

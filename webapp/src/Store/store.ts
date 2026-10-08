@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import artilleryReducer from './slices/artillerySlice';
-import navReducer from './slices/navSlice';
+import operationReducer from './slices/operationSlice';
 
 export const store = configureStore({
   reducer: {
-    nav: navReducer,
     artillery: artilleryReducer,
+    operation: operationReducer,
   },
 });
 

@@ -89,6 +89,17 @@ export const useKeyUp = (callbacks: Partial<Record<Buttons, () => void>>) => {
   });
 };
 
+/**
+ *
+ * @param callback
+ *
+ * Usage:
+ * useWheel((direction) => {
+ *   const goingRight = direction === WheelDirection.Right;
+ *   const goingLeft = direction === WheelDirection.Left;
+ * });
+ *
+ */
 export const useWheel = (callback: (direction: WheelDirection) => void) => {
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
